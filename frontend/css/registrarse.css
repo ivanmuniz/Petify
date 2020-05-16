@@ -1,0 +1,40 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+form {
+    text-align: center;
+}
+
+.table-col {
+    display: flex;
+    flex-direction: column;
+    text-align: right;
+}
+
+.table-row {
+    display: flex;
+}
+
+input {
+    /* width: 300px; */
+    margin-left: 5px;
+}
+
+input[type=submit] {
+    width: 100%;
+    margin: 0;
+}
+
+.main-table-col {
+    display: inline-flex;
+    flex-direction: column;
+}
+
+label {
+    width: 100%;
+    display: block;
+    text-align: right;
+}

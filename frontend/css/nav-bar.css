@@ -1,0 +1,64 @@
+.hamburguer-hide {
+    display: none;
+}
+
+#navbar {
+    background-color: #ff4949;
+}
+
+.container {
+    display: flex;
+}
+
+.hamburguer {
+    margin-left: auto;
+}
+
+#navbar div a {
+    line-height: 50px;
+}
+
+#navbar a {
+    text-decoration: none;
+    color: #eeeeee;
+}
+
+#navbar a:hover {
+    text-decoration: none;
+    color: #dedede;
+}
+.logo {
+    font-weight: bold;
+}
+
+.hamburguer-button {
+    padding: 6px;
+    border: 1px solid #eeeeee;
+    border-radius: 3px;
+
+}
+
+
+@media (min-width: 600px) and (max-width: 990px) {
+
+}
+
+@media (min-width: 991px) {
+    .hamburguer {
+        display: none;
+    }
+
+    .hamburguer-hide {
+        display: flex;
+        flex: 1;
+    }
+
+    .container div:not(:last-child) a {
+        padding-right: 10px;
+    }
+
+    .right {
+        margin-left: auto;
+    }
+    
+}
