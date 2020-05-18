@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const uuid = require('uuid');
 
-const usersSchema = new mongoose.Schema({
+const userSchema = new mongoose.Schema({
     id: {
         type: String,
         required: true,
@@ -38,17 +38,26 @@ const usersSchema = new mongoose.Schema({
     }
 });
 
-const usersModel = mongoose.model("User", usersSchema);
+const userModel = mongoose.model("User", userSchema);
 
 const Users = {
     createUser : (user) => {
-        return usersModel.create(user)
+        return userModel.create(user)
             .then( user => {
                 return user;
             })
             .catch( err => {
                 console.log(err);
                 throw {code: err.code, keyValue: err.keyValue};
+            });
+    },
+    login : (email) => {
+        return userModel.findOne({email})
+            .then( user => {
+                return user;
+            })
+            .catch( err => {
+                throw new Error(err);
             });
     }
 };

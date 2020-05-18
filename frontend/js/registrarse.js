@@ -15,8 +15,7 @@ function postData(data) {
             // console.log(response)
             if(response.ok) {
                 if(response.redirected) {
-                    window.location.href = response.url;
-                    return;
+                    return window.location.href = response.url;
                 }
             }
             throw new Error(response.statusText);
