@@ -11,9 +11,11 @@
   "license": "ISC",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.13.0",
+    "bcrypt": "^4.0.1",
     "bootstrap": "^4.4.1",
     "express": "^4.17.1",
     "mongoose": "^5.9.14",
-    "morgan": "^1.10.0"
+    "morgan": "^1.10.0",
+    "uuid": "^8.0.0"
   }
 }

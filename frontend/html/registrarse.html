@@ -20,32 +20,80 @@
     </header>
 
     <main>
-        <form action="/api/registrarse" method="POST">
-            <div class="main-table-col">
-                <div class="table-col">
-                    <div class="table-row">
-                        <label for="nombre">Nombre:</label>
-                        <input type="text" name="nombre" id="nombre">
-                    </div>
-                    <div class="table-row">
-                        <label for="apellido">Apellido:</label>
-                        <input type="text" name="apellido" id="apellido">
-                    </div>
-                    <div class="table-row">
-                        <label for="email">Email:</label>
-                        <input type="email" name="" id="email">
-                    </div>
-                    <div class="table-row">
-                        <label for="password">Contraseña:</label>
-                        <input type="password" name="password" id="password">
+        <form id="form-register">
+            <fieldset>
+                <div class="card">
+                    <div class="card-body">
+                        <legend class="card-title text-center">Registro</legend>
+                        <div class="form-group">
+                            <label for="name">Nombre:</label>
+                            <input type="text" id="name" name="name" class="form-control form-control-sm">
+                        </div>
+                        <div class="form-group">
+                            <label for="last-name">Apellido:</label>
+                            <input type="text" id="last-name" name="last-name" class="form-control form-control-sm">
+                        </div>
+                        <div class="form-group">
+                            <label for="state">Estado:</label>
+                            <select name="state" id="state" class="form-control form-control-sm">
+                                <option value="DIF">Distrito Federal</option>
+                                <option value="AGS">Aguascalientes</option>
+                                <option value="BCN">Baja California</option>
+                                <option value="BCS">Baja California Sur</option>
+                                <option value="CAM">Campeche</option>
+                                <option value="CHP">Chiapas</option>
+                                <option value="CHI">Chihuahua</option>
+                                <option value="COA">Coahuila</option>
+                                <option value="COL">Colima</option>
+                                <option value="DUR">Durango</option>
+                                <option value="GTO">Guanajuato</option>
+                                <option value="GRO">Guerrero</option>
+                                <option value="HGO">Hidalgo</option>
+                                <option value="JAL">Jalisco</option>
+                                <option value="MEX">M&eacute;xico</option>
+                                <option value="MIC">Michoac&aacute;n</option>
+                                <option value="MOR">Morelos</option>
+                                <option value="NAY">Nayarit</option>
+                                <option value="NLE">Nuevo Le&oacute;n</option>
+                                <option value="OAX">Oaxaca</option>
+                                <option value="PUE">Puebla</option>
+                                <option value="QRO">Quer&eacute;taro</option>
+                                <option value="ROO">Quintana Roo</option>
+                                <option value="SLP">San Luis Potos&iacute;</option>
+                                <option value="SIN">Sinaloa</option>
+                                <option value="SON">Sonora</option>
+                                <option value="TAB">Tabasco</option>
+                                <option value="TAM">Tamaulipas</option>
+                                <option value="TLX">Tlaxcala</option>
+                                <option value="VER">Veracruz</option>
+                                <option value="YUC">Yucat&aacute;n</option>
+                                <option value="ZAC">Zacatecas</option>
+                            </select>
+                        </div>
+                        <div class="form-group">
+                            <label for="city">Ciudad:</label>
+                            <input type="text" id="city" name="city" class="form-control form-control-sm">
+                        </div>
+                        <div class="form-group">
+                            <label for="cell-phone">Celular:</label>
+                            <input type="text" id="cell-phone" name="cell-phone" class="form-control form-control-sm">
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Correo:</label>
+                            <input type="email" id="email" name="email" class="form-control form-control-sm">
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Contraseña:</label>
+                            <input type="password" id="password" name="password" class="form-control form-control-sm">
+                        </div>
+                        <input type="submit" class="btn btn-primary btn-block" value="Registrarse">
                     </div>
                 </div>
-                <input type="submit" value="Registrarse">
-            </div>
+            </fieldset>
         </form>
     </main>
 
-
     <script src="./recycled/navbar.js"></script>
+    <script src="./registrarse.js"></script>
 </body>
 </html>
