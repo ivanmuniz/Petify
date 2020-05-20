@@ -44,7 +44,7 @@ function watchRegisterForm() {
 }
 
 function init() {
-    loadNavBar({isLogin: false})
+    initNavBar();
     watchRegisterForm();
 }
 

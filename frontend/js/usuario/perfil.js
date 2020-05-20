@@ -26,8 +26,7 @@ function isUserLoggedIn() {
         .catch( err => {
             // Sesion expired
             localStorage.clear();
-            // TODO: Remove initNavBar() from here once the fetch is made sync
-            initNavBar()
+            window.location.href = "/";
         });
 }
 
