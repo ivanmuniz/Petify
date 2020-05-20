@@ -1,0 +1,5 @@
+function init() {
+    initNavBar();
+}
+
+init();

@@ -44,6 +44,11 @@
 }
 
 @media (min-width: 991px) {
+    #navbar div a {
+        line-height: 50px;
+        display: block;
+    }
+
     .hamburguer {
         display: none;
     }
