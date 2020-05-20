@@ -1,7 +1,7 @@
 function loadNavBar( userData ) {
     let navElement = document.getElementById("navbar");
     let navbar;
-    if( userData.isLogin ) {
+    if( userData ) {
         navbar = 
         `
             <div class="container">
@@ -113,7 +113,7 @@ function verifyUser() {
             watchHamburguerMenu();
         })
         .catch( err => {
-            loadNavBar( {isLogin: false} );
+            loadNavBar();
             watchHamburguerMenu();
         });
 }

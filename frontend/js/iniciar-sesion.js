@@ -37,7 +37,7 @@ function watchLoginForm() {
 }
 
 function init() {
-    loadNavBar({isLogin: false})
+    initNavBar();
     watchLoginForm();
 }
 
