@@ -20,13 +20,13 @@ function loadNavBar( userData ) {
 
                 <div class="hamburguer-hide">
                     <div>
-                        <a href="./sobre-nosotros">Sobre nosotros</a>
+                        <a href="/sobre-nosotros">Sobre nosotros</a>
                     </div>
                     <div>
-                        <a href="./adoptar">Adoptar</a>
+                        <a href="/adoptar">Adoptar</a>
                     </div>
                     <div class="right">
-                        <a href="#">${userData.firstName} ${userData.lastName}</a>
+                        <a href="/usuario/perfil">${userData.firstName} ${userData.lastName}</a>
                     </div>
                     <div>
                         <a href="/" id="logout-btn">Cerrar sesion</a>
@@ -54,16 +54,16 @@ function loadNavBar( userData ) {
 
                 <div class="hamburguer-hide">
                     <div>
-                        <a href="./sobre-nosotros">Sobre nosotros</a>
+                        <a href="/sobre-nosotros">Sobre nosotros</a>
                     </div>
                     <div>
-                        <a href="./adoptar">Adoptar</a>
+                        <a href="/adoptar">Adoptar</a>
                     </div>
                     <div class="right">
-                        <a href="./iniciar-sesion">Iniciar sesión</a>
+                        <a href="/iniciar-sesion">Iniciar sesión</a>
                     </div>
                     <div>
-                        <a href="./registrarse">Registrarse</a>
+                        <a href="/registrarse">Registrarse</a>
                     </div>
                 </div>
             </div>
@@ -86,45 +86,28 @@ function watchHamburguerMenu() {
     });
 }
 
-function logout() {
-    localStorage.removeItem("token");
-}
-
-function verifyUser() {
-    let url = "/api/validate-user";
-    let settings = {
-        method : 'GET',
-        headers : {
-            sessiontoken : localStorage.getItem( 'token' )
-        }
-    };
-
-    fetch( url, settings )
-        .then( response => {
-            if( response.ok ){
-                return response.json();
-            }
-
-            throw new Error( response.statusText );
-        })
-        .then( responseJSON => {
-            loadNavBar( responseJSON );
-            watchLogout();
-            watchHamburguerMenu();
-        })
-        .catch( err => {
-            loadNavBar();
-            watchHamburguerMenu();
-        });
-}
-
 function watchLogout() {
     let logoutBtn = document.querySelector('#logout-btn');
-    logoutBtn.addEventListener("click", ev =>{
-        logout();
+
+    logoutBtn.addEventListener("click", ev => {
+        localStorage.clear();
     });
 }
 
 function initNavBar() {
-    verifyUser();
+    let userData;
+    if( localStorage.getItem("token") ) {
+        userData = {
+            firstName: localStorage.getItem("firstName"),
+            lastName: localStorage.getItem("lastName")
+        }
+    }
+    if (userData) {
+        loadNavBar( userData );
+        watchLogout();
+        watchHamburguerMenu();
+    } else {
+        loadNavBar();
+        watchHamburguerMenu();
+    }
 }

@@ -80,18 +80,17 @@ api.post('/iniciar-sesion', express.json(), (req, res) => {
                   if( result ) {
                      // TODO: Create user sesion
                      let userData = {
-                        isLogin: true,
                         firstName : user.name,
                         lastName : user.lastName,
                         id : user.id,
-                        email : user.email
+                        email : user.email,
                      };
-                     jwt.sign( userData, SECRET_TOKEN, { expiresIn: '30s'}, ( err, token ) => {
+                     jwt.sign( userData, SECRET_TOKEN, { expiresIn: '15m'}, ( err, token ) => {
                         if( err ) {
                            res.statusMessage = "Something went wrong with generating the token.";
                            return res.status( 400 ).end();
                         }
-                        return res.status( 200 ).json( { token } );
+                        return res.status( 200 ).json( {token} );
                      })
                   }
                   else {

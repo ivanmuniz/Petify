@@ -3,14 +3,14 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>Document</title>
+        <title></title>
         
         <!-- Bootstrap node modules -->
-        <link rel="stylesheet" href="/css/bootstrap.css">
+        <link rel="stylesheet" href="./css/bootstrap.css">
         <!-- Font awesome node modules -->
-        <link rel="stylesheet" href="/css/all.css">
+        <link rel="stylesheet" href="./css/all.css">
 
-        <link rel="stylesheet" href="/nav-bar.css">
+        <link rel="stylesheet" href="./nav-bar.css">
     </head>
     <body>
         <header>
@@ -19,7 +19,7 @@
         <div class="container">
             <h1>Adoptar</h1>
         </div>
-        <script src="/recycled/navbar.js"></script>
-        <script src="/adoptar.js"></script>
+        <script src="./recycled/navbar.js"></script>
+        <script src="./.js"></script>
     </body>
 </html>
