@@ -10,6 +10,7 @@ function postData(data) {
         },
         body: JSON.stringify(data)
     }
+
     fetch(url, settings)
         .then( response => {
             // console.log(response)
@@ -27,21 +28,23 @@ function postData(data) {
 
 function watchRegisterForm() {
     let registerForm = document.getElementById("form-register");
+    
     registerForm.addEventListener("submit", (ev) => {
         ev.preventDefault();
-        let name = registerForm.name.value;
-        let lastName = registerForm['last-name'].value;
-        let estado = registerForm.state.options[state.selectedIndex].value;
-        let city = registerForm.city.value;
-        let cellPhone = registerForm['cell-phone'].value;
-        let email = registerForm.email.value;
-        let password = registerForm.password.value;
-        // console.log({name, lastName, state: estado, city, cellPhone, email, password});
+        let name = registerForm.name.value,
+            lastName = registerForm['last-name'].value,
+            estado = registerForm.state.options[state.selectedIndex].value,
+            city = registerForm.city.value,
+            cellPhone = registerForm['cell-phone'].value,
+            email = registerForm.email.value,
+            password = registerForm.password.value;
+
         postData({name, lastName, state: estado, city, cellPhone, email, password});
     });
 }
 
 function init() {
+    loadNavBar({isLogin: false})
     watchRegisterForm();
 }
 

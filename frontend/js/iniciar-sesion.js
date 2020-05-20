@@ -12,11 +12,13 @@ function loginCall(data) {
     fetch(url, settings)
         .then( response => {
             if(response.ok) {
-                if(response.redirected) {
-                    return window.location.href = response.url;
-                }
+                return response.json();
             }
             throw new Error(response.statusText);
+        })
+        .then (responseJSON => {
+            localStorage.setItem( 'token', responseJSON.token );
+            window.location.href = "/";
         })
         .catch( err => {
             alert(err.message);
@@ -25,6 +27,7 @@ function loginCall(data) {
 
 function watchLoginForm() {
     let loginForm = document.getElementById("form-login");
+
     loginForm.addEventListener("submit", (ev) => {
         ev.preventDefault();
         let email = loginForm.email.value;
@@ -34,6 +37,7 @@ function watchLoginForm() {
 }
 
 function init() {
+    loadNavBar({isLogin: false})
     watchLoginForm();
 }
 
