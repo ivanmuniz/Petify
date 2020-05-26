@@ -4,7 +4,7 @@ function loadNavBar( userData ) {
     if( userData ) {
         navbar = 
         `
-            <div class="container">
+            <div class="container navbar">
                 <div class="logo">
                     <a href="/">
                         <i class="fas fa-paw"></i>
@@ -38,7 +38,7 @@ function loadNavBar( userData ) {
     else {
         navbar = 
         `
-            <div class="container">
+            <div class="container navbar">
                 <div class="logo">
                     <a href="/">
                         <i class="fas fa-paw"></i>

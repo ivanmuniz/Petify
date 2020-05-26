@@ -6,16 +6,22 @@
     background-color: #ff4949;
 }
 
-.container {
+.container.navbar {
     display: flex;
+}
+
+.navbar {
+    padding-top: 0;
+    padding-bottom: 0;
 }
 
 .hamburguer {
     margin-left: auto;
 }
 
-#navbar div a {
+#navbar .logo a, .hamburguer-hide a {
     line-height: 50px;
+    display: block;
 }
 
 #navbar a {
@@ -58,7 +64,7 @@
         flex: 1;
     }
 
-    .container div:not(:last-child) a {
+    .container.navbar div:not(:last-child) a {
         padding-right: 10px;
     }
 

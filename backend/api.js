@@ -9,24 +9,31 @@ const api = express.Router();
 const { Users } = require('./models/User');
 const { Errors } = require('./error');
 
-api.get('/', (req, res) => {
-   let studentList = {
-      nombre: 'Pedro'
-   };
-   return res.status(200).json(studentList);
-});
-
+function validateUser(req, res, next) {
+   const { sessiontoken } = req.headers;
+   if( !sessiontoken ) {
+      res.statusMessage = "Session token missing in headers";
+      return res.status(406).end();
+   }
+   jwt.verify( sessiontoken, SECRET_TOKEN, ( err, decoded ) => {
+      if( err ){
+         res.statusMessage = "Session expired!";
+         return res.status( 400 ).end();
+      }
+      next();
+   });
+}
 
 api.get( '/validate-user', ( req, res ) => {
    const { sessiontoken } = req.headers;
 
    jwt.verify( sessiontoken, SECRET_TOKEN, ( err, decoded ) => {
-       if( err ){
-           res.statusMessage = "Session expired!";
-           return res.status( 400 ).end();
-       }
+      if( err ){
+         res.statusMessage = "Session expired!";
+         return res.status( 400 ).end();
+      }
 
-       return res.status( 200 ).json( decoded );
+      return res.status( 200 ).json( decoded );
    });
 });
 
@@ -72,7 +79,7 @@ api.post('/iniciar-sesion', express.json(), (req, res) => {
       return res.status(406).end();
    }
 
-   Users.login( email )
+   Users.searchUserByMail( email )
       .then( user => {
          if( user ) {
             bcrypt.compare(password, user.password)
@@ -109,6 +116,66 @@ api.post('/iniciar-sesion', express.json(), (req, res) => {
          }
       })
       .catch( err => {
+         res.statusMessage = 'Something is wrong with the Database. Try again later.';
+         return res.status(500).end();
+      });
+});
+
+api.get('/user/:id', validateUser, (req, res) => {
+   let id = req.params.id;
+
+   Users.searchUserByID(id)
+      .then( user => {
+         console.log(user)
+         if(user) {
+            let userData = {
+               firstName : user.name,
+               lastName : user.lastName,
+               state : user.state,
+               city : user.city,
+               cellPhone : user.cellPhone,
+               email : user.email
+            };
+            return res.status(200).json(userData);
+         }
+         res.statusMessage = `Usuario con id: ${id} no encontrado`;
+         return res.status(404).end();
+      })
+      .catch( err => {
+         res.statusMessage = err.message;
+         return res.status( 400 ).end();
+      });
+});
+
+api.patch('/user/:id', [validateUser, express.json()], (req, res) => {
+   let paramsID = req.params.id;
+   let bodyID = req.body.id;
+   let updatesInUser = req.body.user;
+
+   if( !bodyID ) { 
+      res.statusMessage = "The 'id' is missing in the body of the request";
+      return res.status(406).end();
+   }
+
+   if( paramsID !== bodyID ) {
+      res.statusMessage = "The 'id' send in the body doesn't match with the one in the parameters";
+      return res.status(409).end();
+   }
+   
+   // console.log(updatesInUser);
+   Users.updateUser(bodyID, updatesInUser)
+      .then( (result) => {
+         let userData = {
+            firstName : result.name,
+            lastName : result.lastName,
+            state : result.state,
+            city : result.city,
+            cellPhone : result.cellPhone,
+            email : result.email
+         };
+         return res.status(202).json(userData);
+      })
+      .catch( (err) => {
          res.statusMessage = 'Something is wrong with the Database. Try again later.';
          return res.status(500).end();
       });

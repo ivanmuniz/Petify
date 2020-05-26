@@ -3,23 +3,23 @@
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title></title>
+        <title>Document</title>
         
         <!-- Bootstrap node modules -->
-        <link rel="stylesheet" href="./css/bootstrap.css">
+        <link rel="stylesheet" href="/css/bootstrap.css">
         <!-- Font awesome node modules -->
-        <link rel="stylesheet" href="./css/all.css">
+        <link rel="stylesheet" href="/css/all.css">
 
-        <link rel="stylesheet" href="./nav-bar.css">
+        <link rel="stylesheet" href="/nav-bar.css">
     </head>
     <body>
         <header>
             <nav id="navbar"></nav>
         </header>
         <div class="container">
-            <h1>Adoptar</h1>
+            <h1></h1>
         </div>
-        <script src="./recycled/navbar.js"></script>
-        <script src="./.js"></script>
+        <script src="/recycled/navbar.js"></script>
+        <script src="/.js"></script>
     </body>
 </html>
