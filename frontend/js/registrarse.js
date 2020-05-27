@@ -44,6 +44,9 @@ function watchRegisterForm() {
 }
 
 function init() {
+    if( localStorage.getItem('token') ) {
+        location.href = '/'
+    }
     initNavBar();
     watchRegisterForm();
 }

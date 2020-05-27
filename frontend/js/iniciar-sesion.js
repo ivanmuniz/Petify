@@ -37,6 +37,9 @@ function watchLoginForm() {
 }
 
 function init() {
+    if( localStorage.getItem('token') ) {
+        location.href = '/'
+    }
     initNavBar();
     watchLoginForm();
 }

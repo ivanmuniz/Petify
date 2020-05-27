@@ -85,7 +85,6 @@ api.post('/iniciar-sesion', express.json(), (req, res) => {
             bcrypt.compare(password, user.password)
                .then( result => {
                   if( result ) {
-                     // TODO: Create user sesion
                      let userData = {
                         firstName : user.name,
                         lastName : user.lastName,

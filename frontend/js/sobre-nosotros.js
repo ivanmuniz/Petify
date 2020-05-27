@@ -16,8 +16,6 @@ async function isUserLoggedIn() {
             throw new Error( response.statusText );
         })
         .then( responseJSON => {
-            localStorage.setItem("firstName", responseJSON.firstName);
-            localStorage.setItem("lastName", responseJSON.lastName);
             localStorage.setItem("id", responseJSON.id);
             localStorage.setItem("email", responseJSON.email);
         })
@@ -53,8 +51,10 @@ async function fetchUserInformation() {
 }
 
 async function init() {
-    await isUserLoggedIn();
-    await fetchUserInformation();
+    if( localStorage.getItem('token') ) {
+        await isUserLoggedIn();
+        await fetchUserInformation();
+    }
     initNavBar()
 }
 

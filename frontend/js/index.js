@@ -51,8 +51,10 @@ async function fetchUserInformation() {
 }
 
 async function init() {
-    await isUserLoggedIn();
-    await fetchUserInformation();
+    if( localStorage.getItem('token') ) {
+        await isUserLoggedIn();
+        await fetchUserInformation();
+    }
     initNavBar()
 }
 

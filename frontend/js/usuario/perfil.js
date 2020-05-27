@@ -16,8 +16,6 @@ async function isUserLoggedIn() {
             throw { code: response.status, statusText: response.statusText };
         })
         .then( responseJSON => {
-            localStorage.setItem("firstName", responseJSON.firstName);
-            localStorage.setItem("lastName", responseJSON.lastName);
             localStorage.setItem("id", responseJSON.id);
             localStorage.setItem("email", responseJSON.email);
         })
@@ -48,7 +46,7 @@ function displayUserInfo(userInfo) {
     form.lastName.value = userInfo.lastName;
     let options = form.state.options;
     for( let i = 0 ; i < options.length ; i++) {
-        if( options[i].value === userInfo.state ) {
+        if( options[i].innerHTML === userInfo.state ) {
             options[i].selected = true;
             break;
         }
@@ -86,7 +84,7 @@ function updateUserInfo() {
     let form = document.getElementById("form-update-user");
     let name = form.name.value,
         lastName = form.lastName.value,
-        state = form.state.options[this.state.selectedIndex].value,
+        state = form.state.options[this.state.selectedIndex].innerHTML,
         city = form.city.value,
         cellPhone = form.cellPhone.value;
     
@@ -120,8 +118,9 @@ function updateUserInfo() {
             throw new Error( response.statusText );
         })
         .then( responseJSON => {
+            userData = responseJSON;
             displayUserInfo( responseJSON );
-            loadNavBar( responseJSON );
+            initNavBar();
         })
         .catch( err => {
 
