@@ -1,5 +1,5 @@
 // Verifies if user session is up, if not clear the localStorage and redirects to home.
-function isUserLoggedIn() {
+async function isUserLoggedIn() {
     let url = "/api/validate-user";
     let settings = {
         method : 'GET',
@@ -8,7 +8,7 @@ function isUserLoggedIn() {
         }
     };
 
-    fetch( url, settings )
+    await fetch( url, settings )
         .then( response => {
             if( response.ok ){
                 return response.json();
@@ -20,8 +20,6 @@ function isUserLoggedIn() {
             localStorage.setItem("lastName", responseJSON.lastName);
             localStorage.setItem("id", responseJSON.id);
             localStorage.setItem("email", responseJSON.email);
-            // TODO: Remove initNavBar() from here once the fetch is made sync
-            initNavBar()
         })
         .catch( err => {
             // Sesion expired
@@ -122,7 +120,8 @@ function updateUserInfo() {
             throw new Error( response.statusText );
         })
         .then( responseJSON => {
-            displayUserInfo(responseJSON);
+            displayUserInfo( responseJSON );
+            loadNavBar( responseJSON );
         })
         .catch( err => {
 
@@ -137,17 +136,14 @@ function watchUpdateForm() {
     });
 }
 
-
-let userData;
-
 async function init() {
     // Verifica que la sesión del usuario siga activa
-    isUserLoggedIn();
+    await isUserLoggedIn();
 
     // Obtener la información del usuario
     await fetchUserInformation();
     console.log("UD: ", userData)
-
+    initNavBar();
     // Desplegar la información del usuario 
     displayUserInfo(userData)
 

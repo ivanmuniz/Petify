@@ -1,4 +1,4 @@
-function isUserLoggedIn() {
+async function isUserLoggedIn() {
     let url = "/api/validate-user";
     let settings = {
         method : 'GET',
@@ -7,7 +7,7 @@ function isUserLoggedIn() {
         }
     };
 
-    fetch( url, settings )
+    await fetch( url, settings )
         .then( response => {
             if( response.ok ){
                 return response.json();
@@ -20,19 +20,42 @@ function isUserLoggedIn() {
             localStorage.setItem("lastName", responseJSON.lastName);
             localStorage.setItem("id", responseJSON.id);
             localStorage.setItem("email", responseJSON.email);
-            // TODO: Remove initNavBar() from here once the fetch is made sync
-            initNavBar()
         })
         .catch( err => {
             // Sesion expired
-            localStorage.clear();
-            // TODO: Remove initNavBar() from here once the fetch is made sync
-            initNavBar()
+            if( err.code === 400 ) {
+                localStorage.clear();
+            }
         });
 }
 
-function init() {
-    isUserLoggedIn();
+async function fetchUserInformation() {
+    let url = `/api/user/${localStorage.getItem("id")}`;
+    let settings = {
+        method : 'GET',
+        headers : {
+            sessiontoken : localStorage.getItem( 'token' )
+        } 
+    };
+    await fetch(url, settings)
+        .then( response => {
+            if( response.ok ) {
+                return response.json();
+            }
+            throw new Error(response.statusText);
+        })
+        .then( responseJSON => {
+            userData = responseJSON;
+        })
+        .catch( err => {
+            console.log(err);
+        })
+}
+
+async function init() {
+    await isUserLoggedIn();
+    await fetchUserInformation();
+    initNavBar()
 }
 
 init();

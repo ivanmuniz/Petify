@@ -1,3 +1,5 @@
+let userData;
+
 function loadNavBar( userData ) {
     let navElement = document.getElementById("navbar");
     let navbar;
@@ -95,13 +97,13 @@ function watchLogout() {
 }
 
 function initNavBar() {
-    let userData;
-    if( localStorage.getItem("token") ) {
-        userData = {
-            firstName: localStorage.getItem("firstName"),
-            lastName: localStorage.getItem("lastName")
-        }
-    }
+    // let userData;
+    // if( localStorage.getItem("token") ) {
+    //     userData = {
+    //         firstName: localStorage.getItem("firstName"),
+    //         lastName: localStorage.getItem("lastName")
+    //     }
+    // }
     if (userData) {
         loadNavBar( userData );
         watchLogout();
