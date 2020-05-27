@@ -1,6 +1,6 @@
 // Verifies if user session is up, if not clear the localStorage and redirects to home.
 async function isUserLoggedIn() {
-    let url = "/api/validate-user";
+    let url = "/api/user/validate-user";
     let settings = {
         method : 'GET',
         headers : {
@@ -135,6 +135,107 @@ function watchUpdateForm() {
     });
 }
 
+function saveNewPet( data, form ) {
+    let url = `/api/pets/`
+    let settings = {
+        method: "POST",
+        headers: {
+            sessiontoken: localStorage.getItem( 'token' ),
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    }
+
+    fetch( url, settings )
+        .then( response => {
+            if( response.ok ) {
+                return response.json();
+            }
+            throw new Error( response.statusText );
+        })
+        .then( responseJSON => {
+            console.log(responseJSON);
+            displayPublishedPets( [responseJSON] );
+            form.reset();
+        })
+        .catch( err => {
+            console.log(err);
+            if( err.code === 400 ) {
+                localStorage.clear();
+                window.location.href = "/";
+            }
+        });
+}
+
+function watchNewPetForm() {
+    let form = document.getElementById( 'form-publicar-mascota' );
+    form.addEventListener( 'submit', (ev) => {
+        ev.preventDefault();
+        let name = form.name.value,
+            age = Number(form.age.value),
+            type = form.type.options[this.type.selectedIndex].innerText;
+            breed = form.breed.value,
+            description = form.description.value;
+
+        let id = localStorage.getItem('id');
+
+        console.log( { id, name, age, type, breed, description } );
+        saveNewPet( { id, name, age, type, breed, description }, form );
+    });
+}
+
+function fetchMyPublishedPets() {
+    let id = localStorage.getItem( 'id' );
+    let url = `/api/user/${id}/mypets`;
+
+    let settings = {
+        method: "GET",
+        headers: {
+            sessiontoken: localStorage.getItem( 'token' ),
+        }
+    };
+
+    fetch( url, settings )
+        .then( response => {
+            if( response.ok ) {
+                return response.json();
+            }
+            throw new Error( response.statusText );
+        })
+        .then( responseJSON => {
+            // console.log( responseJSON );
+            displayPublishedPets( responseJSON );
+        })
+        .catch( err => {
+            console.log( err );
+        });
+
+
+}
+
+function displayPublishedPets( myPublishedPets ) {
+    let results = document.getElementById( 'published-pets-container' );
+
+    myPublishedPets.forEach( pet => {
+        results.innerHTML += 
+        `
+            <div class="col-md-4">
+                <div class="card">
+                    <div>
+                        ${pet.name}
+                    </div>
+                    <div>
+                        ${pet.age}
+                    </div>
+                    <div>
+                        ${pet.breed}
+                    </div>
+                <div>
+            </div>
+        `;
+    });
+}
+
 async function init() {
     // Verifica que la sesión del usuario siga activa
     await isUserLoggedIn();
@@ -148,6 +249,12 @@ async function init() {
 
     // Actualizar la información del usuario
     watchUpdateForm();
+
+    // Form nueva mascota
+    watchNewPetForm();
+
+    // Obtener mis mascotas publicadas
+    fetchMyPublishedPets();
 }
 
 init();

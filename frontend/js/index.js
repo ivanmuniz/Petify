@@ -1,5 +1,5 @@
 async function isUserLoggedIn() {
-    let url = "/api/validate-user";
+    let url = "/api/user/validate-user";
     let settings = {
         method : 'GET',
         headers : {
@@ -50,12 +50,63 @@ async function fetchUserInformation() {
         })
 }
 
+function fetchLatestPublishedPets() {
+    let url = `/api/pets/index`;
+    let settings = {
+        method: "GET",
+        headers: {
+            sessiontoken: localStorage.getItem( 'token' )
+        }
+    };
+
+    fetch( url, settings )
+        .then( response => {
+            if( response.ok ) {
+                return response.json();
+            }
+            throw new Error( response.statusText );
+        })
+        .then( responseJSON => {
+            displayPets( responseJSON );
+        })
+        .catch( err => {
+            console.log( err );
+        });
+
+
+}
+
+function displayPets( latestPetsList ) {
+    let results = document.getElementById( 'latest-published-pets' );
+
+    latestPetsList.forEach( pet => {
+        results.innerHTML += 
+        `
+            <div class="col-md-4">
+                <div class="card">
+                    <div>
+                        ${pet.name}
+                    </div>
+                    <div>
+                        ${pet.age}
+                    </div>
+                    <div>
+                        ${pet.breed}
+                    </div>
+                <div>
+            </div>
+        `;
+    });
+
+}
+
 async function init() {
     if( localStorage.getItem('token') ) {
         await isUserLoggedIn();
         await fetchUserInformation();
     }
     initNavBar()
+    fetchLatestPublishedPets();
 }
 
 init();

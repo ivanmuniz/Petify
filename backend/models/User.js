@@ -75,7 +75,7 @@ const Users = {
             return result;
         })
         .catch( (err) => {
-            return err;
+            throw err;
         })
     }
 };

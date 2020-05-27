@@ -1,6 +1,6 @@
 function loginCall(data) {
     console.log(data);
-    let url = "/api/iniciar-sesion";
+    let url = "/api/user/login";
     let settings = {
         method: "POST",
         headers: {

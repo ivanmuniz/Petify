@@ -1,5 +1,5 @@
 async function isUserLoggedIn() {
-    let url = "/api/validate-user";
+    let url = "/api/user/validate-user";
     let settings = {
         method : 'GET',
         headers : {
