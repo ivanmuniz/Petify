@@ -1,6 +1,6 @@
 function loginCall(data) {
     console.log(data);
-    let url = "/api/iniciar-sesion";
+    let url = "/api/user/login";
     let settings = {
         method: "POST",
         headers: {
@@ -37,6 +37,9 @@ function watchLoginForm() {
 }
 
 function init() {
+    if( localStorage.getItem('token') ) {
+        location.href = '/'
+    }
     initNavBar();
     watchLoginForm();
 }

@@ -1,7 +1,7 @@
 
 function postData(data) { 
     console.log(data);
-    let url = "/api/registrarse"
+    let url = "/api/user/register"
     let settings = {
         method: "POST",
         redirect: "follow",
@@ -44,6 +44,9 @@ function watchRegisterForm() {
 }
 
 function init() {
+    if( localStorage.getItem('token') ) {
+        location.href = '/'
+    }
     initNavBar();
     watchRegisterForm();
 }

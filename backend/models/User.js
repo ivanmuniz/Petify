@@ -51,7 +51,7 @@ const Users = {
                 throw {code: err.code, keyValue: err.keyValue};
             });
     },
-    login : (email) => {
+    searchUserByMail : (email) => {
         return userModel.findOne({email})
             .then( user => {
                 return user;
@@ -59,6 +59,24 @@ const Users = {
             .catch( err => {
                 throw new Error(err);
             });
+    },
+    searchUserByID : (id) => {
+        return userModel.findOne({id})
+            .then( user => {
+                return user;
+            })
+            .catch( err => {
+                throw new Error(err);
+            });
+    },
+    updateUser : (id, user) => {
+        return userModel.findOneAndUpdate( { id }, { $set: user }, { new: true }  )
+        .then( (result) => {
+            return result;
+        })
+        .catch( (err) => {
+            throw err;
+        })
     }
 };
 

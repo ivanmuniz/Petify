@@ -20,6 +20,7 @@ app.use('/api', api);
 app.use( express.static('frontend/html', {extensions: ['html']}) );
 app.use( express.static('frontend/css') );
 app.use( express.static('frontend/js') );
+app.use( express.static('frontend/images') );
 app.use( express.static('node_modules/bootstrap/dist') );
 app.use( express.static('node_modules/@fortawesome/fontawesome-free') );
 

@@ -1,10 +1,12 @@
+let userData;
+
 function loadNavBar( userData ) {
     let navElement = document.getElementById("navbar");
     let navbar;
     if( userData ) {
         navbar = 
         `
-            <div class="container">
+            <div class="container navbar">
                 <div class="logo">
                     <a href="/">
                         <i class="fas fa-paw"></i>
@@ -38,7 +40,7 @@ function loadNavBar( userData ) {
     else {
         navbar = 
         `
-            <div class="container">
+            <div class="container navbar">
                 <div class="logo">
                     <a href="/">
                         <i class="fas fa-paw"></i>
@@ -95,13 +97,13 @@ function watchLogout() {
 }
 
 function initNavBar() {
-    let userData;
-    if( localStorage.getItem("token") ) {
-        userData = {
-            firstName: localStorage.getItem("firstName"),
-            lastName: localStorage.getItem("lastName")
-        }
-    }
+    // let userData;
+    // if( localStorage.getItem("token") ) {
+    //     userData = {
+    //         firstName: localStorage.getItem("firstName"),
+    //         lastName: localStorage.getItem("lastName")
+    //     }
+    // }
     if (userData) {
         loadNavBar( userData );
         watchLogout();

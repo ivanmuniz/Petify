@@ -1,5 +1,5 @@
-function isUserLoggedIn() {
-    let url = "/api/validate-user";
+async function isUserLoggedIn() {
+    let url = "/api/user/validate-user";
     let settings = {
         method : 'GET',
         headers : {
@@ -7,34 +7,106 @@ function isUserLoggedIn() {
         }
     };
 
-    fetch( url, settings )
+    await fetch( url, settings )
         .then( response => {
             if( response.ok ){
                 return response.json();
             }
 
-            throw new Error( response.statusText );
+            throw { code: response.status, statusText: response.statusText };
         })
         .then( responseJSON => {
-            localStorage.setItem("firstName", responseJSON.firstName);
-            localStorage.setItem("lastName", responseJSON.lastName);
             localStorage.setItem("id", responseJSON.id);
             localStorage.setItem("email", responseJSON.email);
-            // TODO: Remove initNavBar() from here once the fetch is made sync
-            initNavBar()
         })
         .catch( err => {
             // Sesion expired
-            localStorage.clear();
-            // TODO: Remove initNavBar() from here once the fetch is made sync
-            initNavBar()
+            if( err.code === 400 ) {
+                localStorage.clear();
+            }
         });
 }
 
-function init() {
-    isUserLoggedIn();
-    // TODO: Wait to isUserLoggedIn() to finish to run initNavBar()
-    // initNavBar()
+async function fetchUserInformation() {
+    let url = `/api/user/${localStorage.getItem("id")}`;
+    let settings = {
+        method : 'GET',
+        headers : {
+            sessiontoken : localStorage.getItem( 'token' )
+        } 
+    };
+    await fetch(url, settings)
+        .then( response => {
+            if( response.ok ) {
+                return response.json();
+            }
+            throw new Error(response.statusText);
+        })
+        .then( responseJSON => {
+            userData = responseJSON;
+        })
+        .catch( err => {
+            console.log(err);
+        })
+}
+
+function fetchLatestPublishedPets() {
+    let url = `/api/pets/index`;
+    let settings = {
+        method: "GET",
+        headers: {
+            sessiontoken: localStorage.getItem( 'token' )
+        }
+    };
+
+    fetch( url, settings )
+        .then( response => {
+            if( response.ok ) {
+                return response.json();
+            }
+            throw new Error( response.statusText );
+        })
+        .then( responseJSON => {
+            displayPets( responseJSON );
+        })
+        .catch( err => {
+            console.log( err );
+        });
+
+
+}
+
+function displayPets( latestPetsList ) {
+    let results = document.getElementById( 'latest-published-pets' );
+
+    latestPetsList.forEach( pet => {
+        results.innerHTML += 
+        `
+            <div class="col-md-4">
+                <div class="card">
+                    <div>
+                        ${pet.name}
+                    </div>
+                    <div>
+                        ${pet.age}
+                    </div>
+                    <div>
+                        ${pet.breed}
+                    </div>
+                <div>
+            </div>
+        `;
+    });
+
+}
+
+async function init() {
+    if( localStorage.getItem('token') ) {
+        await isUserLoggedIn();
+        await fetchUserInformation();
+    }
+    initNavBar()
+    fetchLatestPublishedPets();
 }
 
 init();
