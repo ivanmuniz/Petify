@@ -35,6 +35,10 @@ const petSchema = new mongoose.Schema({
         type: Date,
         default: Date.now,
         required: true
+    },
+    imageFileName: {
+        type: String,
+        default: '/no-pet-image.png'
     }
 });
 
@@ -63,6 +67,16 @@ const Pets = {
     
     getLatestPublishedPets: () => {
         return petModel.find().sort( { dateCreated: -1 } ).limit( 9 )
+            .then( result => {
+                return result;
+            })
+            .catch( err => {
+                throw err;
+            });
+    },
+
+    deletePetByID: ( id ) => {
+        return petModel.deleteOne( { id })
             .then( result => {
                 return result;
             })

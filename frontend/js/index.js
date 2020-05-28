@@ -82,16 +82,21 @@ function displayPets( latestPetsList ) {
     latestPetsList.forEach( pet => {
         results.innerHTML += 
         `
-            <div class="col-md-4">
+            <div class="col-md-4 mb-5">
                 <div class="card">
-                    <div>
-                        ${pet.name}
-                    </div>
-                    <div>
-                        ${pet.age}
-                    </div>
-                    <div>
-                        ${pet.breed}
+                    <div class="card-body">
+                        <div class="text-center">
+                            <img src="${pet.imageFileName}" width="50%"/>
+                        </div>
+                        <div>
+                            <strong>Nombre: </strong>${pet.name}
+                        </div>
+                        <div>
+                            <strong>Edad: </strong>${pet.age}
+                        </div>
+                        <div>
+                            <strong>Raza: </strong>${pet.breed}
+                        </div>
                     </div>
                 <div>
             </div>
