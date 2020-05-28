@@ -1,3 +1,5 @@
+let myPublishedPetsList;
+
 // Verifies if user session is up, if not clear the localStorage and redirects to home.
 async function isUserLoggedIn() {
     let url = "/api/user/validate-user";
@@ -137,13 +139,26 @@ function watchUpdateForm() {
 
 function saveNewPet( data, form ) {
     let url = `/api/pets/`
+
+    let formData = new FormData();
+    formData.append( 'id', localStorage.getItem('id') );
+    formData.append( 'name', form.name.value);
+    formData.append( 'age', form.age.value);
+    formData.append( 'type', form.type.value);
+    formData.append( 'breed', form.breed.value);
+    formData.append( 'description', form.description.value);
+    formData.append( 'picture', form.fotoMascota.files[0]);
+
+    console.log(formData);
+
     let settings = {
         method: "POST",
         headers: {
             sessiontoken: localStorage.getItem( 'token' ),
-            "Content-Type": "application/json"
+            // "Content-Type": "application/json"
+            // "Content-Type": "multipart/form-data"
         },
-        body: JSON.stringify(data)
+        body: formData
     }
 
     fetch( url, settings )
@@ -155,6 +170,7 @@ function saveNewPet( data, form ) {
         })
         .then( responseJSON => {
             console.log(responseJSON);
+            myPublishedPetsList.push( responseJSON );
             displayPublishedPets( [responseJSON] );
             form.reset();
         })
@@ -175,12 +191,14 @@ function watchNewPetForm() {
             age = Number(form.age.value),
             type = form.type.options[this.type.selectedIndex].innerText;
             breed = form.breed.value,
-            description = form.description.value;
+            description = form.description.value,
+            fotoMascota = form.fotoMascota.files[0];
 
+        // console.log(fotoMascota);
         let id = localStorage.getItem('id');
 
-        console.log( { id, name, age, type, breed, description } );
-        saveNewPet( { id, name, age, type, breed, description }, form );
+        // console.log( { id, name, age, type, breed, description, fotoMascota } );
+        saveNewPet( { id, name, age, type, breed, description, fotoMascota }, form );
     });
 }
 
@@ -204,6 +222,7 @@ function fetchMyPublishedPets() {
         })
         .then( responseJSON => {
             // console.log( responseJSON );
+            myPublishedPetsList = responseJSON;
             displayPublishedPets( responseJSON );
         })
         .catch( err => {
@@ -219,20 +238,84 @@ function displayPublishedPets( myPublishedPets ) {
     myPublishedPets.forEach( pet => {
         results.innerHTML += 
         `
-            <div class="col-md-4">
+            <div class="col-sm-6 col-md-3 mb-5">
                 <div class="card">
-                    <div>
-                        ${pet.name}
+                    <div class="">
+                        <button type="button" class="close mr-3 mt-1">
+                            <span id="delete" aria-hidden="true">&times;</span>
+                        </button>
                     </div>
-                    <div>
-                        ${pet.age}
-                    </div>
-                    <div>
-                        ${pet.breed}
+                    <div class="card-body">
+                        <div class="text-center">
+                            <img src="${pet.imageFileName}" width="50%"/>
+                        </div>
+                        <div>
+                            <strong>Nombre:</strong> <span class="name">${pet.name}</span>
+                        </div>
+                        <div>
+                            <strong>Edad: </strong>${pet.age}
+                        </div>
+                        <div>
+                            <strong>Raza: </strong>${pet.breed}
+                        </div>
                     </div>
                 <div>
             </div>
         `;
+    });
+}
+
+function deletePublishedPet( id, imageFileName, el ) {
+    let url = `/api/pets/${id}`;
+    let settings = {
+        method: 'DELETE',
+        headers: {
+            sessiontoken: localStorage.getItem( 'token' ),
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify( { imageFileName } )
+    }
+
+    fetch( url, settings )
+        .then( response => {
+            if( response.ok ) {
+                el.parentNode.removeChild(el);
+                myPublishedPetsList = myPublishedPetsList.filter( (pet) => {
+                    return pet.id !== id;
+                });
+                return;
+            }
+            throw new Error( response.statusText );
+        })
+        .catch( err => {
+            console.log(err);
+        });
+}
+
+
+function watchResults() {
+
+    let results = document.getElementById("published-pets-container");
+
+    results.addEventListener("click", ev => {
+        
+        if(ev.target.matches('#delete')) {
+
+            let response = confirm("Seguro que desea eliminar esta mascota?");
+
+            if( response ) {
+                // Delete pet
+                let el = ev.target.parentNode.parentNode.parentNode.parentNode;
+                let petName = el.querySelector('.name').innerText;
+                let pet = myPublishedPetsList.find( (aux) => {
+                    if( petName === aux.name) {
+                        return true;
+                    }
+                });
+
+                deletePublishedPet( pet.id, pet.imageFileName, el );
+            }
+        }
     });
 }
 
@@ -255,6 +338,7 @@ async function init() {
 
     // Obtener mis mascotas publicadas
     fetchMyPublishedPets();
+    watchResults();
 }
 
 init();
