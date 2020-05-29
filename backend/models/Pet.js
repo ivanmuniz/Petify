@@ -106,6 +106,16 @@ const Pets = {
             .catch( err => {
                 throw err;
             })
+    },
+
+    updatePet : ( _id, pet ) => {
+        return petModel.findOneAndUpdate( { _id }, { $set: pet }, { new: true }  )
+        .then( (result) => {
+            return result;
+        })
+        .catch( (err) => {
+            throw err;
+        })
     }
 }
 

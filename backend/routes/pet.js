@@ -161,4 +161,19 @@ pet.get('/:id', (req, res) => {
         });
 });
 
+pet.patch('/:id', validateUser, (req, res) => {
+    console.log(req.body);
+    let { _id, pet } = req.body; 
+
+    Pets.updatePet( _id, pet )
+        .then( newPet => {
+            return res.status(204).end();
+        })
+        .catch( err => {
+            console.log(err);
+            res.statusMessage = `Pet PATCH /:id - Error en base de datos al actualizar mascota.`;
+            return res.status( 500 ).end(); 
+        });
+})
+
 module.exports = pet;
