@@ -33,7 +33,7 @@ function watchRegisterForm() {
         ev.preventDefault();
         let name = registerForm.name.value.trim(),
             lastName = registerForm['last-name'].value.trim(),
-            estado = registerForm.state.options[state.selectedIndex].value.trim(),
+            estado = registerForm.state.options[state.selectedIndex].text.trim(),
             city = registerForm.city.value.trim(),
             cellPhone = registerForm['cell-phone'].value.trim(),
             email = registerForm.email.value.trim(),
