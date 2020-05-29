@@ -83,6 +83,29 @@ const Pets = {
             .catch( err => {
                 throw err;
             });
+    },
+    
+    getAllPets: () => {
+        return petModel.find()
+            .populate( 'createdBy', ['name', 'lastName', 'cellPhone', 'email'])
+            .then( result => {
+                console.log("SERVER: ", result);
+                return result;
+            })
+            .catch( err => {
+                throw err;
+            })
+    },
+
+    getPetByID: ( _id ) => {
+        return petModel.findById( _id )
+            .populate( 'createdBy', ['name', 'lastName', 'cellPhone', 'email'])
+            .then( result => {
+                return result;
+            })
+            .catch( err => {
+                throw err;
+            })
     }
 }
 
