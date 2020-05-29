@@ -82,9 +82,9 @@ function displayPets( petsList ) {
     if( userData ) {
         // Registered user
         if( petsList.length < 1 ) {
-            results.innerHTML +=
+            results.innerHTML =
             `
-                <div class="alert alert-info" role="alert">
+                <div class="col alert alert-info" role="alert">
                     No hay mascotas guardadas en la base de datos.
                 </div>
             `;
@@ -110,7 +110,7 @@ function displayPets( petsList ) {
                                 <a href="/mascota?petid=${pet._id}" class="btn btn-primary btn-block">Más información</a>
                             </div>
                         <div>
-                    </div> 
+                    </div>
                 `;
             });
         }
@@ -118,9 +118,9 @@ function displayPets( petsList ) {
     } else {
         // Unregistered user
         if( petsList.length < 1 ) {
-            results.innerHTML +=
+            results.innerHTML =
             `
-                <div class="alert alert-info" role="alert">
+                <div class="col alert alert-info" role="alert">
                     No hay mascotas guardadas en la base de datos.
                 </div>
             `;
