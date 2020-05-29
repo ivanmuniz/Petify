@@ -188,11 +188,11 @@ function watchNewPetForm() {
     let form = document.getElementById( 'form-publicar-mascota' );
     form.addEventListener( 'submit', (ev) => {
         ev.preventDefault();
-        let name = form.name.value,
+        let name = form.name.value.trim(),
             age = Number(form.age.value),
             type = form.type.options[this.type.selectedIndex].innerText;
-            breed = form.breed.value,
-            description = form.description.value,
+            breed = form.breed.value.trim(),
+            description = form.description.value.trim(),
             fotoMascota = form.fotoMascota.files[0];
 
         // console.log(fotoMascota);
