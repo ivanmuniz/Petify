@@ -22,10 +22,22 @@ const { Users } =require( './../models/User' );
 pet.use( express.json() );
 // pet.use( validateUser );
 
+// GET ALL PETS
 pet.get('/', (req, res) => {
-    return res.status(200).json( { response: "Get all pets" } );
+
+    Pets.getAllPets()
+        .then( pets => {
+            console.log( pets );
+            return res.status(200).json( pets );
+        })
+        .catch( err => {
+            console.log( err );
+            res.statusMessage = 'Pet GET /: Error en base de datos obtener mascotas.';
+            return res.status( 500 ).end(); 
+        })
 });
 
+// POST A PET
 pet.post('/', validateUser, upload.single('picture'), (req, res) => {
 
     let { id, name, age, type, breed, description } = req.body;
@@ -83,6 +95,7 @@ pet.post('/', validateUser, upload.single('picture'), (req, res) => {
         });
 });
 
+// GET LATEST PUBLISHED PETS FOR INDEX.HTML
 pet.get('/index', (req, res) => {
     Pets.getLatestPublishedPets()
         .then( petsList => {
@@ -95,6 +108,7 @@ pet.get('/index', (req, res) => {
         });
 });
 
+// DELETE A PET
 pet.delete('/:id', validateUser, (req, res) => {
     let id = req.params.id;
     let { imageFileName } = req.body;
@@ -113,7 +127,7 @@ pet.delete('/:id', validateUser, (req, res) => {
             if( imageFileName !== "/no-pet-image.png") {
                 fs.unlink( path.join(__dirname, `../../frontend/images/${imageFileName}`), err => {
                     if (err) {
-                        throw err ;
+                        console.log(err);
                     }
                     console.log('Pet image deleted');
                 });
@@ -126,6 +140,25 @@ pet.delete('/:id', validateUser, (req, res) => {
             return res.status( 500 ).end(); 
         });
     return res.status(200).end();
-})
+});
+
+pet.get('/:id', (req, res) => {
+    let id = req.params.id;
+    console.log(id);
+
+    Pets.getPetByID( id )
+        .then( pet => {
+            if( !pet ) {
+                res.statusMessage = `Mascota no encontrada en la base de datos`;
+                return res.status(404).end();
+            }
+            return res.status(200).json( pet );
+        })
+        .catch( err => {
+            console.log(err);
+            res.statusMessage = `Pet GET /:id - Error en base de datos al buscar mascota. ${err.message} ${err.reason}`;
+            return res.status( 500 ).end(); 
+        });
+});
 
 module.exports = pet;
