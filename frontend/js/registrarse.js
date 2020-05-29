@@ -31,12 +31,12 @@ function watchRegisterForm() {
     
     registerForm.addEventListener("submit", (ev) => {
         ev.preventDefault();
-        let name = registerForm.name.value,
-            lastName = registerForm['last-name'].value,
-            estado = registerForm.state.options[state.selectedIndex].value,
-            city = registerForm.city.value,
-            cellPhone = registerForm['cell-phone'].value,
-            email = registerForm.email.value,
+        let name = registerForm.name.value.trim(),
+            lastName = registerForm['last-name'].value.trim(),
+            estado = registerForm.state.options[state.selectedIndex].value.trim(),
+            city = registerForm.city.value.trim(),
+            cellPhone = registerForm['cell-phone'].value.trim(),
+            email = registerForm.email.value.trim(),
             password = registerForm.password.value;
 
         postData({name, lastName, state: estado, city, cellPhone, email, password});

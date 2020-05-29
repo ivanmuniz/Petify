@@ -1,4 +1,5 @@
 let myPublishedPetsList;
+let _id;
 
 // Verifies if user session is up, if not clear the localStorage and redirects to home.
 async function isUserLoggedIn() {
@@ -84,11 +85,11 @@ function updateUserInfo() {
     // Obtener información modificada
     let id = localStorage.getItem('id');
     let form = document.getElementById("form-update-user");
-    let name = form.name.value,
-        lastName = form.lastName.value,
+    let name = form.name.value.trim(),
+        lastName = form.lastName.value.trim(),
         state = form.state.options[this.state.selectedIndex].innerHTML,
-        city = form.city.value,
-        cellPhone = form.cellPhone.value;
+        city = form.city.value.trim(),
+        cellPhone = form.cellPhone.value.trim();
     
     let updatedInfo = {
         id,
@@ -125,7 +126,7 @@ function updateUserInfo() {
             initNavBar();
         })
         .catch( err => {
-
+            console.log( err );
         });
 
 }
@@ -142,11 +143,11 @@ function saveNewPet( data, form ) {
 
     let formData = new FormData();
     formData.append( 'id', localStorage.getItem('id') );
-    formData.append( 'name', form.name.value);
-    formData.append( 'age', form.age.value);
+    formData.append( 'name', form.name.value.trim());
+    formData.append( 'age', form.age.value.trim());
     formData.append( 'type', form.type.value);
-    formData.append( 'breed', form.breed.value);
-    formData.append( 'description', form.description.value);
+    formData.append( 'breed', form.breed.value.trim());
+    formData.append( 'description', form.description.value.trim());
     formData.append( 'picture', form.fotoMascota.files[0]);
 
     console.log(formData);
@@ -258,6 +259,7 @@ function displayPublishedPets( myPublishedPets ) {
                         <div>
                             <strong>Raza: </strong>${pet.breed}
                         </div>
+                        <button id=${pet._id} data-toggle="modal" data-target="#editar-mascota" class="btn btn-primary btn-block">Editar información</button>
                     </div>
                 <div>
             </div>
@@ -285,10 +287,15 @@ function deletePublishedPet( id, imageFileName, el ) {
                 });
                 return;
             }
-            throw new Error( response.statusText );
+            throw response;
         })
         .catch( err => {
             console.log(err);
+            // Caduco sesion
+            if( err.status === 400 ) {
+                localStorage.clear();
+                location.href = "/iniciar-sesion";
+            }
         });
 }
 
@@ -316,6 +323,58 @@ function watchResults() {
                 deletePublishedPet( pet.id, pet.imageFileName, el );
             }
         }
+        else if( ev.target.matches('.btn.btn-primary.btn-block') ) {
+            // console.log(ev.target);
+            _id = ev.target.id;
+        }
+    });
+}
+
+function updatePet() {
+    let form = document.getElementById( 'form-actualizar-mascota' );
+    let data = {
+        _id: _id,
+        pet: {
+            ...( form.name.value.trim() ? { name: form.name.value.trim() } : {} ),
+            ...( form.age.value.trim() ? { age: form.age.value.trim() } : {} ),
+            ...( form.type.value.trim() ? { type: form.type.value.trim() } : {} ),
+            ...( form.breed.value.trim() ? { breed: form.breed.value.trim() } : {} ),
+            ...( form.description.value.trim() ? { description: form.description.value.trim() } : {} )
+        }
+    };
+    let url = `/api/pets/${_id}`;
+    let settings = {
+        method: "PATCH",
+        headers: {
+            sessiontoken: localStorage.getItem( 'token' ),
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify( data )
+    };
+    console.log(data);
+
+    fetch( url, settings )
+        .then( response => {
+            if( response.ok ) {
+                location.reload();
+            }
+            throw response;
+        })
+        .catch( err => {
+            console.log( err.statusText );
+            if( err.status === 400 ) {
+                localStorage.clear();
+                location.href = "/iniciar-sesion"
+            }
+        })
+
+
+}
+
+function watchUpdatePet() {
+    let btnActualizar = document.getElementById( 'btn-update-pet' );
+    btnActualizar.addEventListener("click", ev => {
+        updatePet();
     });
 }
 
@@ -339,6 +398,9 @@ async function init() {
     // Obtener mis mascotas publicadas
     fetchMyPublishedPets();
     watchResults();
+
+    // 
+    watchUpdatePet();
 }
 
 init();

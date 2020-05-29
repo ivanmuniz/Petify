@@ -30,7 +30,7 @@ function watchLoginForm() {
 
     loginForm.addEventListener("submit", (ev) => {
         ev.preventDefault();
-        let email = loginForm.email.value;
+        let email = loginForm.email.value.trim();
         let password = loginForm.password.value;
         loginCall({email, password});
     });
